@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="gmail" default="all">
+
+    <property file="build.properties"/>
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+
+    <path id="class.path">
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="all" depends="build, dist" description="build all"/>
+
+    <target name="build" depends="init, clean, compile" description="build all modules"/>
+
+    <target name="init" description="Build initialization"/>
+
+    <target name="clean" description="cleanup all">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean" description="compile all">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               source="1.6" target="1.6" debug="${compiler.debug}" failonerror="true"
+               debuglevel="lines,vars,source">
+            <classpath refid="class.path"/>
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile" description="distribute all">
+        <jar jarfile="${dist.dir}/com.iriand.email.jar" basedir="" excludes="**/**">
+            <zipfileset dir="lib" prefix="lib">
+                <include name="**/*.jar"/>
+            </zipfileset>
+
+            <zipfileset dir="build" prefix="">
+            </zipfileset>
+        </jar>
+    </target>
+
+</project>
